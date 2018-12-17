@@ -1,24 +1,11 @@
 	SELECT 
-	dbo.tbl_kundeliste_med_forskjellige_nummer.Ansattnr, dbo.tbl_kundeliste_med_forskjellige_nummer.T0E, 
-	dbo.tbl_kundeliste_med_forskjellige_nummer.[T0E Navn], 
-	dbo.tbl_kundeliste_med_forskjellige_nummer.Fornavn, 
-	dbo.tbl_kundeliste_med_forskjellige_nummer.Etternavn,
-	dbo.[Tbl_Kvotefiler fra Zalaris].Oppdatert_dato,
-	dbo.[Tbl_kvotefiler fra Zalaris].Salgs_dato,
-	dbo.[Tbl_Kvotefiler fra Zalaris].Kvotekode, 
-	dbo.[Tbl_Kvotefiler fra Zalaris].Materialnummer, 
-	dbo.Tbl_Material_master.Tekst,
-	dbo.[Tbl_Kvotefiler fra Zalaris].ÿl, 
-	dbo.[Tbl_Kvotefiler fra Zalaris].Brus, 
-	dbo.[Tbl_Kvotefiler fra Zalaris].Gratis,
-	dbo.Tbl_Kvotedefinisjoner.ÿl,
-	dbo.Tbl_Kvotedefinisjoner.Brus,
-	dbo.Tbl_Kvotedefinisjoner.Gratis
-	FROM dbo.tbl_kundeliste_med_forskjellige_nummer 
-	INNER JOIN dbo.[Tbl_kvotefiler fra Zalaris] 
-	ON dbo.tbl_kundeliste_med_forskjellige_nummer.Ansattnr = dbo.[Tbl_kvotefiler fra Zalaris].Ansattnummer 
+	dbo.[Tbl_Kvotefiler fra Zalaris].Ansattnummer,
+	sum(dbo.Tbl_Kvotedefinisjoner.ÿl) AS TotaltÿlKvote,
+	sum(dbo.Tbl_Kvotedefinisjoner.Brus) AS TotaltBrusKvote,
+	sum(dbo.Tbl_Kvotedefinisjoner.Gratis) AS TotaltGratisKvote
+	FROM dbo.[Tbl_Kvotefiler fra Zalaris]
 	LEFT JOIN dbo.Tbl_Kvotedefinisjoner 
 	ON dbo.[Tbl_Kvotefiler fra Zalaris].Kvotekode = dbo.Tbl_Kvotedefinisjoner.Kvote
-	LEFT JOIN dbo.Tbl_Material_Master
-	ON dbo.[Tbl_Kvotefiler fra Zalaris].Materialnummer = dbo.Tbl_Material_Master.BSP1
-	WHERE Ansattnr = 7363;
+	GROUP BY dbo.[Tbl_Kvotefiler fra Zalaris].Ansattnummer
+	ORDER BY dbo.[Tbl_Kvotefiler fra Zalaris].Ansattnummer ASC
+	;
